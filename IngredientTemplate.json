@@ -1,0 +1,33 @@
+{
+    "name":"Chilli",
+    "subtitle":"The best chilli you will probably ever make",
+    "servings":"4",
+    "image":"https://i.imgur.com/PRMCCTV.jpg",
+    "ingredients":[
+        {
+            "quantity": "300g",
+            "name": "Mince beef",
+            "type": "Meat"
+        },
+        {
+            "quantity": "1",
+            "name": "Red onion",
+            "type": "Vegetable"
+        },
+        {
+            "quantity": "3",
+            "name": "Garlic cloves",
+            "type": "Vegetable"
+        },
+        {
+            "quantity": "2 tbsp",
+            "name": "Cumin",
+            "type": "Spice"
+        }
+    ],
+    "steps":[
+        "Heat a deep saucepan on medium heat. Whilst the pan is warming up, ensure the mince is ready by removing any paper or packaging from the meat.",
+        "Place the mince in the saucepan, and wait for it to brown. Seperate the meat using a wooden spoon.",
+        "I love memes"
+    ]
+}

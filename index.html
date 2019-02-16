@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link href="https://fonts.googleapis.com/css?family=Alice|Playfair+Display" rel="stylesheet">
+        <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet"> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            var ingredients_quantity = [];
+            var ingredients_suffix = [];
+            $(document).ready(function(){
+                $.getJSON("IngredientTemplate.json",
+                    function (data) {
+                        $.each(data, function (field) { 
+                            if (field == "ingredients") {
+                                for (let i = 0; i < data[field].length; i++) { 
+                                    $("#"+field).append(data[field][i]["quantity"], " " ,data[field][i]["name"] ,"<br>");
+                                    var qty = data[field][i]["quantity"]
+                                    ingredients_quantity.push(parseInt(qty));
+                                    ingredients_suffix.push(qty.replace(parseInt(qty), ""));
+                                }
+                            } else if(field == "steps") {
+                                for (let i = 0; i < data[field].length; i++) { 
+                                    $("#"+field).append(i+1,".",data[field][i], "<br>");
+                                }
+                            } else if(field == "image") {
+                                $("#image").attr("src", data[field]);
+                                $("#image").attr("alt", "Picture of " + data["name"]);
+                            } else {
+                            $("#"+field).append(data[field]);
+                            }
+                        });
+                        var srv = parseInt(data["servings"]);
+                        var tmp = [];
+                        $("#sslider").attr("min", srv);
+                        $("#sslider").attr("max", srv * 2);
+                        $("#sslider").attr("value", srv);
+                        $("#sslider").on("change", function () {
+                            var ratio = $(this).val()/srv; // calcualte ratio
+                            $(this).prev().html("Servings: " + $(this).val()); // update heading
+                            for(var i=0; i<ingredients_quantity.length; i++) { // iterate through list
+                                tmp[i] = ((ingredients_quantity[i] * ratio) + ingredients_suffix[i]); // multiply each element by ratio
+                            }
+                            $("#ingredients").empty();
+                            for (let i = 0; i < tmp.length; i++) { 
+                                    $("#ingredients").append(tmp[i], " " , data["ingredients"][i]["name"] ,"<br>");
+                                }
+                            tmp=[] 
+                    });   
+                    }
+                    
+                );
+                              
+            });
+        </script>
+    </head>
+    
+    <style>
+    p {font-family: 'Arial', serif}
+    h1,h2,h3,h4,h5,h6 {font-family: 'Alice', serif}
+    #image {max-width: 70%; display: block; margin-left: auto; margin-right: auto}
+    #title_div {text-align: center}
+    
+    #serving_div {text-align: center; justify-content: center; padding: 10px}
+    #serving_text {flex: 1; max-width: 20%; margin: auto}
+    #serving_slider {flex: 0 0 10%; max-width: 20%; margin: auto}
+    
+    #ingredients_div {border: 2px solid black; border-radius: 5px; padding: 5px; width: 40%; margin: auto; text-align: center; margin-bottom: 2%}
+    #method_div {border: 2px solid black; border-radius: 5px; padding: 5px; width: 40%; margin: auto;}
+    
+    #taste_bar {overflow: hidden; margin-left: 40%; margin-right: 10%; text-align: center; max-width: 20%;}
+    
+    #steps {text-align: left}
+    </style>
+    
+    <body>
+        <div id="title_div">
+            <h1 id="name"></h1>
+            <h3 id="subtitle"></h3>
+        </div>
+
+        <div id="taste_bar">
+            <div style="float: left; width: 20%;">
+                <h4><i class="em-svg em-apple"></i><br>Healthy</h4> 
+            </div>
+            <div style="float: left; width: 20%; margin-left: 20%">
+                <h4><i class="em-svg em-hot_pepper"></i><br>Spicy</h4> 
+            </div>
+            <div style="float: right; width: 20%;">
+                <h4><i class="em em-flag-mx"><br></i><br>Mexican</h4> 
+            </div>
+        </div>
+        
+        <div>
+            <img id="image" src="" alt="">
+        </div>
+        <div id="serving_div">
+            <div id="serving_text">
+                <h2 id="servings">Servings: </h6>
+            </div>
+            <div id="serving_slider">
+                <input id="sslider" type="range" step="2" value=min/>    
+            </div>
+        </div>
+        <div id="ingredients_div">
+            <h3>Ingredients</h3>
+            <p id="ingredients"></p>
+        </div>
+        <div id="method_div">
+            <h3>Method</h3>
+            <p id="steps"></p>
+        </div>
+    </body>
+</html>
